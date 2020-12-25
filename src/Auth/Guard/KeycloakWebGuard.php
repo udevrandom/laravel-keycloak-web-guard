@@ -142,7 +142,7 @@ class KeycloakWebGuard implements Guard
     }
 
     /**
-     * Check user is authenticated and has a role
+     * Check user is authenticated and has a role or roles. Must have ALL roles.
      *
      * @param array|string $roles
      * @param string $resource Default is empty: point to client_id
@@ -178,5 +178,50 @@ class KeycloakWebGuard implements Guard
         $combinedRoles = array_merge($realmRoles,$resourceRoles);
 
         return empty(array_diff((array) $roles, $combinedRoles));
+    }
+    /**
+     * Check user is authenticated and has at least one of the provided roles
+     *
+     * @param array|string $roles
+     * @param string $resource Default is empty: point to client_id
+     *
+     * @return boolean
+     */
+    public function hasAnyRoles($roles, $resource = '')
+    {
+        if (empty($resource)) {
+            $resource = Config::get('keycloak-web.client_id');
+        }
+
+        if (! $this->check()) {
+            return false;
+        }
+
+        $token = KeycloakWeb::retrieveToken();
+
+        if (empty($token) || empty($token['access_token'])) {
+            return false;
+        }
+
+        $token = new KeycloakAccessToken($token);
+        $token = $token->parseAccessToken();
+
+        $resourceRoles = $token['resource_access'] ?? [];
+        $resourceRoles = $resourceRoles[ $resource ] ?? [];
+        $resourceRoles = $resourceRoles['roles'] ?? [];
+
+        $realmRoles = $token['realm_access'] ?? [];
+        $realmRoles = $realmRoles['roles'] ?? [];
+
+        $combinedRoles = array_merge($realmRoles,$resourceRoles);
+
+        foreach ($roles as $neededRole){
+            if (in_array($neededRole,$combinedRoles)){
+                \Log::debug("Identified $neededRole as available for this user");
+                return true;
+            }
+        }
+
+        return false;
     }
 }
