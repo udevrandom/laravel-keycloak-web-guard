@@ -16,4 +16,8 @@ class KeycloakAuthenticated extends Authenticate
     {
         return route('keycloak.login');
     }
+
+    protected function redirectNotEnoughPermissions($request){
+        return route('keycloak.notenoughpermissions');
+    }
 }

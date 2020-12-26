@@ -71,6 +71,7 @@ class KeycloakWebGuardServiceProvider extends ServiceProvider
 
         // Add Middleware "keycloak-web-can"
         $this->app['router']->aliasMiddleware('keycloak-web-can', KeycloakCan::class);
+        $this->app['router']->aliasMiddleware('keycloak-web-hasany', KeycloakAnyCan::class);
 
         // Bind for client data
         $this->app->when(KeycloakService::class)->needs(ClientInterface::class)->give(function() {
@@ -90,6 +91,7 @@ class KeycloakWebGuardServiceProvider extends ServiceProvider
             'logout' => 'logout',
             'register' => 'register',
             'callback' => 'callback',
+            'notenoughpermissions' => 'notenoughpermissions'
         ];
 
         $routes = Config::get('keycloak-web.routes', []);
@@ -104,6 +106,10 @@ class KeycloakWebGuardServiceProvider extends ServiceProvider
 
         if (! empty($routes['logout'])) {
             $router->middleware('web')->get($routes['logout'], 'Vizir\KeycloakWebGuard\Controllers\AuthController@logout')->name('keycloak.logout');
+        }
+
+        if (! empty($routes['notenoughpermissions'])) {
+            $router->middleware('web')->get($routes['notenoughpermissions'], 'Vizir\KeycloakWebGuard\Controllers\AuthController@invalidPermissions')->name('keycloak.notenoughpermissions');
         }
 
         if (! empty($routes['register'])) {

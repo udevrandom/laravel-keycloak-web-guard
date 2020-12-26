@@ -193,7 +193,19 @@ $this->middleware('keycloak-web-can:manage-something-cool');
 $this->middleware('keycloak-web-can:manage-something-cool|manage-something-nice|manage-my-application');
 ```
 
-This middleware works searching for all roles on default resource (client_id).
+This middleware works searching for all roles on default resource (client_id). It requires that all roles exist on the logged in user.
+
+To check if a user has at least 1 provided role, use keycloak-web-anycan
+```php
+$this->middleware('keycloak-web-anycan:manage-something-cool');
+
+// For multiple roles, separate with '|'
+$this->middleware('keycloak-web-anycan:view-app|manage-app|administer-app');
+```
+
+This middleware works by checking both the Client and Realm roles and if any of the provided roles match, it allows the traffic to pass. Otherwise, it presumes
+the user should see an error message indicating that while logged in, they are not authorized for the needed role.
+
 
 You can extend it and register your own middleware on Kernel.php or just use `Auth::hasRole($roles, $resource)` on your Controller.
 

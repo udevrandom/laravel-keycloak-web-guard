@@ -172,12 +172,7 @@ class KeycloakWebGuard implements Guard
         $resourceRoles = $resourceRoles[ $resource ] ?? [];
         $resourceRoles = $resourceRoles['roles'] ?? [];
 
-        $realmRoles = $token['realm_access'] ?? [];
-        $realmRoles = $realmRoles['roles'] ?? [];
-
-        $combinedRoles = array_merge($realmRoles,$resourceRoles);
-
-        return empty(array_diff((array) $roles, $combinedRoles));
+        return empty(array_diff((array) $roles, $resourceRoles));
     }
     /**
      * Check user is authenticated and has at least one of the provided roles
