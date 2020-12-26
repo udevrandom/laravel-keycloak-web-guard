@@ -49,7 +49,7 @@ class AuthController extends Controller
 
     public function invalidPermissions(){
 
-        $errorURL = Config::get('keycloak-web.invalid_permissions_url','');
+        $errorURL = \Config::get('keycloak-web.invalid_permissions_url','');
         if ($errorURL == ''){
             return "
 <!DOCTYPE html>
@@ -78,8 +78,8 @@ class AuthController extends Controller
       h1 { letter-spacing: -1px; line-height: 60px; font-size: 60px; font-weight: 100; margin: 0px; text-shadow: 0 1px 0 #fff; }
       p { color: rgba(0, 0, 0, 0.5); margin: 10px 0 10px; font-size: 18px; font-weight: 200; line-height: 1.6em;}
 
-      ul { list-style: none; margin: 25px 0; padding: 0; }
-      li { display: table-cell; font-weight: bold; width: 1%; }
+      ul { margin: 25px 0; padding: 0; }
+      li { font-weight: bold;  }
 
       .logo { display: inline-block; margin-top: 35px; }
       .logo-img-2x { display: none; }
@@ -97,6 +97,7 @@ class AuthController extends Controller
       #suggestions {
         margin-top: 35px;
         color: #ccc;
+        text-align: left;
       }
       #suggestions a {
         color: #666666;
@@ -113,10 +114,11 @@ class AuthController extends Controller
     <div class=\"container\">
       <p><strong>You are logged in, but do not have permission for this application.</strong></p>
 
-      <p>While you are logged in as " . \Auth::user()->email . ", that user does not have permission to access this application. So, we cannot let you in.</p>
+      <p>While you are logged in, you do not have permission to access this application. So, we cannot let you in.</p>
 
-    <p>Some suggestions:</p>
-    <ol>
+
+    <p style='text-align:left'>Some suggestions:</p>
+    <ol style='text-align: left'>
     <li>If you have multiple logins, you can <a href='/logout'>Log Out</a> and login using the correct username.</li><li>You can <a href='mailto:itsupport@miraclemethod.com'>Contact itsupport@miraclemethod.com</a> for assistance.</li>
 
 

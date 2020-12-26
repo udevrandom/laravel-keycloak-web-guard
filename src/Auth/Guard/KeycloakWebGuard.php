@@ -174,6 +174,21 @@ class KeycloakWebGuard implements Guard
 
         return empty(array_diff((array) $roles, $resourceRoles));
     }
+
+    public function getAttribute($attribute){
+
+        $token = KeycloakWeb::retrieveToken();
+
+        if (empty($token) || empty($token['access_token'])) {
+            return false;
+        }
+
+        $token = new KeycloakAccessToken($token);
+        $token = $token->parseAccessToken();
+
+        return $token[$attribute];
+
+    }
     /**
      * Check user is authenticated and has at least one of the provided roles
      *
