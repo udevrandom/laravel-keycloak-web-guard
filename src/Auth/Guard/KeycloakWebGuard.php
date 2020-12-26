@@ -186,6 +186,10 @@ class KeycloakWebGuard implements Guard
         $token = new KeycloakAccessToken($token);
         $token = $token->parseAccessToken();
 
+        if (!isset($token[$attribute])){
+            return null;
+        }
+
         return $token[$attribute];
 
     }
