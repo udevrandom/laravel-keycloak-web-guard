@@ -73,6 +73,7 @@ class KeycloakWebGuardServiceProvider extends ServiceProvider
         // Add Middleware "keycloak-web-can"
         $this->app['router']->aliasMiddleware('keycloak-web-can', KeycloakCan::class);
         $this->app['router']->aliasMiddleware('keycloak-web-hasany', KeycloakAnyCan::class);
+        $this->app['router']->aliasMiddleware('keycloak-web-anycan', KeycloakAnyCan::class);
 
         // Bind for client data
         $this->app->when(KeycloakService::class)->needs(ClientInterface::class)->give(function() {

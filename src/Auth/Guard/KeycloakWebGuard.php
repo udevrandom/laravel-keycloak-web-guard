@@ -182,7 +182,7 @@ class KeycloakWebGuard implements Guard
      *
      * @return boolean
      */
-    public function hasAnyRoles($roles, $resource = '')
+    public function hasAnyRole($roles, $resource = '')
     {
         if (empty($resource)) {
             $resource = Config::get('keycloak-web.client_id');

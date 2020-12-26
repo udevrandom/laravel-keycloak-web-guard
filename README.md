@@ -195,12 +195,12 @@ $this->middleware('keycloak-web-can:manage-something-cool|manage-something-nice|
 
 This middleware works searching for all roles on default resource (client_id). It requires that all roles exist on the logged in user.
 
-To check if a user has at least 1 provided role, use keycloak-web-anycan
+To check if a user has at least 1 provided role, use keycloak-web-hasany
 ```php
-$this->middleware('keycloak-web-anycan:manage-something-cool');
+$this->middleware('keycloak-web-hasany:manage-something-cool');
 
 // For multiple roles, separate with '|'
-$this->middleware('keycloak-web-anycan:view-app|manage-app|administer-app');
+$this->middleware('keycloak-web-hasany:view-app|manage-app|administer-app');
 ```
 
 This middleware works by checking both the Client and Realm roles and if any of the provided roles match, it allows the traffic to pass. Otherwise, it presumes
