@@ -195,6 +195,11 @@ class KeycloakWebGuard implements Guard
         return $token[$attribute];
 
     }
+
+    public function hasAnyRole($roles,$resource){
+        return $this->hasAnyRoles($roles,$resource);
+    }
+
     /**
      * Check user is authenticated and has at least one of the provided roles
      *
