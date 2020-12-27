@@ -171,8 +171,10 @@ class KeycloakWebGuard implements Guard
         $resourceRoles = $token['resource_access'] ?? [];
         $resourceRoles = $resourceRoles[ $resource ] ?? [];
         $resourceRoles = $resourceRoles['roles'] ?? [];
+        $realmRoles = $token['realm_access'] ?? [];
+        $realmRoles = $realmRoles['roles'] ?? [];
 
-        return empty(array_diff((array) $roles, $resourceRoles));
+        return empty(array_diff((array) $roles, array_merge($resourceRoles,$realmRoles)));
     }
 
     public function getAttribute($attribute){
@@ -209,6 +211,11 @@ class KeycloakWebGuard implements Guard
 
         if (! $this->check()) {
             return false;
+        }
+
+        //convert to array
+        if (is_string($roles)){
+            $roles = [$roles];
         }
 
         $token = KeycloakWeb::retrieveToken();
