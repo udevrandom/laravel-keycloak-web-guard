@@ -196,7 +196,7 @@ class KeycloakWebGuard implements Guard
 
     }
 
-    public function hasAnyRole($roles,$resource){
+    public function hasAnyRole($roles,$resource  = ''){
         return $this->hasAnyRoles($roles,$resource);
     }
 
