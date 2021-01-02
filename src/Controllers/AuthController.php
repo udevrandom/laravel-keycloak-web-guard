@@ -157,7 +157,10 @@ class AuthController extends Controller
         if (empty($state) || ! KeycloakWeb::validateState($state)) {
             KeycloakWeb::forgetState();
 
-            throw new KeycloakCallbackException('Invalid state');
+            //capture it, but then just restart the login cycle
+            \Sentry::captureException(new KeycloakCallbackException('Invalid state'));
+
+            return redirect(route('keycloak.login'));
         }
 
         // Change code for token
